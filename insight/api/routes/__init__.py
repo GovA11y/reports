@@ -3,6 +3,7 @@
 from fastapi import APIRouter
 from .metrics import router as metrics_router
 from .issues import router as issues_router
+# from .webhook import router as webhook_router
 
 router = APIRouter()
 
@@ -10,6 +11,9 @@ router.include_router(metrics_router, prefix="/metrics")
 
 # Issues Endpoint
 router.include_router(issues_router, prefix="/issues")
+
+# Webhooks
+# router.include_router(webhook_router, prefix="/webhook")
 
 # adding a new router, for example:
 # from .new_module import router as new_module_router
