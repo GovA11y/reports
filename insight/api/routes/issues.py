@@ -38,8 +38,8 @@ async def read_issues(
     domain: str,
     limit: Optional[int] = None,
     rule_type: Optional[str] = None,
-    section508: Optional[bool] = None,
-    super_waggy: Optional[bool] = None,
+    # section508: Optional[bool] = None,
+    # super_waggy: Optional[bool] = None,
     db: Session = Depends(get_db),
     tags=["Issues"],
     summary="Axe Issues per Filters"
@@ -79,13 +79,14 @@ async def read_issues(
       ON r.id = test.rule_id
     WHERE s.id IS NOT NULL
       AND (:rule_type is NULL or test.rule_type = :rule_type)
-      AND (:section508 is NULL or test.section508 = :section508)
-      AND (:super_waggy is NULL or test.super_waggy = :super_waggy)
     ORDER BY test.tested_at desc
     {f'LIMIT {limit}' if limit else ''}
     """)
+  #  -- AND (:section508 is NULL or test.section508 = :section508)
+  #    -- AND (:super_waggy is NULL or test.super_waggy = :super_waggy)
 
-    result = db.execute(sql, {"domain": domain, "rule_type": rule_type, "section508": section508, "super_waggy": super_waggy}).fetchall()
+    # result = db.execute(sql, {"domain": domain, "rule_type": rule_type, "section508": section508, "super_waggy": super_waggy}).fetchall()
+    result = db.execute(sql, {"domain": domain, "rule_type": rule_type}).fetchall()
 
     data = [
         {**{k: (custom_encoder(v) if isinstance(v, datetime) else v) for k, v in row._asdict().items()}}
