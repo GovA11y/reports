@@ -1,6 +1,6 @@
 # Use an official Python runtime as a parent image
-# Use alpine with Python pre-installed
-FROM python:3.9-alpine
+# Use bullseye with Python pre-installed
+FROM python:3.9-bullseye
 
 # Set the working directory to /app
 WORKDIR /app
@@ -9,13 +9,17 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Add essential packages and psycopg2 prerequisites then upgrade pip
-RUN apk update \
-    && apk add --virtual build-deps gcc python3-dev musl-dev postgresql-dev \
-    && pip install --upgrade pip
+RUN apt-get update && apt-get install -y \
+    gcc \
+    python3-dev \
+    musl-dev \
+    libpq-dev \
+&& pip install --upgrade pip
 
 # Install python packages and remove unnecessary packages
 RUN pip install --no-cache-dir -r requirements.txt \
-    && apk del build-deps
+&& apt-get autoremove -y gcc python3-dev musl-dev libpq-dev \
+&& rm -rf /var/lib/apt/lists/*
 
 # Copy the rest of the application code
 COPY insight /app/insight
