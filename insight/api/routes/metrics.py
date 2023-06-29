@@ -1,3 +1,5 @@
+# metrics.py
+# Relative Path: insight/api/routes/metrics.py
 from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.params import Query, Path
 from pydantic import BaseModel
@@ -6,11 +8,14 @@ import io
 import csv
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_
-from ..core.database import SessionLocal, engine, Base
-from ..api import models, schemas
+from enum import Enum
+from ...core import SessionLocal, engine, Base
+from .. import models, schemas
+
 
 # Create API router
 router = APIRouter()
+
 
 # Get a session
 def get_db():
@@ -21,18 +26,21 @@ def get_db():
         db.close()
 
 
+class OutputType(str, Enum):
+    json = "json"
+    csv = "csv"
+
+
 # Get Number of URLs for domain & sub-domains
-@router.get('/count/{domain}',
-            summary="Number of tracked URLs by domain",
-            response_model=List[schemas.Domain],
-            response_description="A list of domains with their count",
-            tags=["Metrics"])
-def read_domain(domain: str = Path(..., description="The domain name to get the URL count"),
+@router.get('/count',
+    summary="Number of tracked URLs by domain",
+    response_description="A list of domains with their count",
+    tags=["Metrics"])
+def read_domain(domain: str = Query(..., description="The domain name to get the URL count"),
                 db: Session = Depends(get_db),
-                output: str = Query(default="json", description="The output format; can be either json or csv")):
+                output: OutputType = Query(OutputType.json, description="The output format; can be either json or csv")):
     """
     Retrieve the number of URLs for a specific domain and its subdomains.
-
 
     **If you enter _va.gov_, test.va.gov, va.gov, and all other va.gov subdomains are counted.**
     The domain name should be provided in the path. The output format is json by default,
@@ -60,7 +68,7 @@ def read_domain(domain: str = Path(..., description="The domain name to get the 
                               url_count=url_count)
                for domain_id, domain, url_count in query_results]
 
-    if output == 'csv':
+    if output == OutputType.csv:
         output = io.StringIO()
         writer = csv.writer(output)
         writer.writerow(["domain_id", "domain", "url_count"])

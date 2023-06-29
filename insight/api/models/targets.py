@@ -1,7 +1,13 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, BigInteger
-from sqlalchemy.sql import func
+# targets.py
+# Relative Path: insight/api/models/targets.py
+from sqlalchemy import Column, Integer, Boolean, ForeignKey, DateTime, BigInteger, String
 from sqlalchemy.orm import relationship
-from ..core.database import Base
+from sqlalchemy.sql import func
+from ...core import Base
+# from .orgs import Entity
+# from .axe import ScanData, Test
+
+
 
 class Domain(Base):
     __tablename__ = "domains"
@@ -16,23 +22,7 @@ class Domain(Base):
 
     # Relationships
     org = relationship('Entity', back_populates='domains')
-    urls = relationship('Url', back_populates='domain')  # Relationship to urls
-
-
-class Entity(Base):
-    __tablename__ = "entities"
-    __table_args__ = {'schema': 'orgs'}
-
-    id = Column(Integer, primary_key=True, index=True)  # Use sequence in PostgreSQL, like: id = Column(Integer, Sequence('fed_agencies_id_seq'), primary_key=True,)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())  # When added
-    updated_at = Column(DateTime(timezone=True), server_default=func.now())  # When row updated
-    name = Column(String, unique=True)  # Entity name
-    # type = Column(String, ForeignKey('refs.org_types.name'))  # What type of org is this? From refs.org_types
-    acronym = Column(String)  # Entity acronym
-    active = Column(Boolean, default=False)  # Is this entity active?
-
-    # Relationships
-    domains = relationship('Domain', back_populates='org')
+    urls = relationship('Url', back_populates='domain')
 
 
 class Url(Base):
@@ -70,3 +60,5 @@ class Url(Base):
 
     # Relationships
     domain = relationship('Domain', back_populates='urls')
+    scan_data = relationship('ScanData', back_populates='url')
+    tests = relationship('Test', back_populates='url')
