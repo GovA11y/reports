@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi.params import Query, Path
+from pydantic import BaseModel
 from typing import List
 import io
 import csv
@@ -20,8 +22,26 @@ def get_db():
 
 
 # Get Number of URLs for domain & sub-domains
-@router.get('/count/{domain}')
-def read_domain(domain: str, db: Session = Depends(get_db), output: str = 'json'):
+@router.get('/count/{domain}',
+            summary="Number of tracked URLs by domain",
+            response_model=List[schemas.Domain],
+            response_description="A list of domains with their count",
+            tags=["Metrics"])
+def read_domain(domain: str = Path(..., description="The domain name to get the URL count"),
+                db: Session = Depends(get_db),
+                output: str = Query(default="json", description="The output format; can be either json or csv")):
+    """
+    Retrieve the number of URLs for a specific domain and its subdomains.
+
+
+    **If you enter _va.gov_, test.va.gov, va.gov, and all other va.gov subdomains are counted.**
+    The domain name should be provided in the path. The output format is json by default,
+    but can be changed to csv.
+
+    - **domain**: The domain name to get the URL count.
+    - **db**: An instance of the database session.
+    - **output**: The output format; can be either json ('json') or csv ('csv'). Default is 'json'.
+    """
     pattern = '%' + domain + '%'
     query_results = db.query(models.Domain.id,
                              models.Domain.domain,
@@ -35,7 +55,7 @@ def read_domain(domain: str, db: Session = Depends(get_db), output: str = 'json'
     if not query_results:
         raise HTTPException(status_code=404, detail="Domain not found")
 
-    domains = [schemas.Domain(id=domain_id,
+    domains = [schemas.Domain(domain_id=domain_id,
                               domain=domain,
                               url_count=url_count)
                for domain_id, domain, url_count in query_results]
@@ -43,9 +63,9 @@ def read_domain(domain: str, db: Session = Depends(get_db), output: str = 'json'
     if output == 'csv':
         output = io.StringIO()
         writer = csv.writer(output)
-        writer.writerow(["id", "domain", "url_count"])
+        writer.writerow(["domain_id", "domain", "url_count"])
         for domain in domains:
-            writer.writerow([domain.id, domain.domain, domain.url_count])
+            writer.writerow([domain.domain_id, domain.domain, domain.url_count])
         response = Response(content=output.getvalue(), media_type="text/csv")
         response.headers["Content-Disposition"] = "attachment; filename=export.csv"
         return response
