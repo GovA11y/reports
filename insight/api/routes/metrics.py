@@ -1,15 +1,15 @@
 # metrics.py
 # Relative Path: insight/api/routes/metrics.py
 from fastapi import APIRouter, Depends, HTTPException, Response
-from fastapi.params import Query, Path
-from pydantic import BaseModel
-from typing import List
+from fastapi.params import Query
+# from pydantic import BaseModel
+# from typing import List
 import io
 import csv
 from sqlalchemy.orm import Session
-from sqlalchemy import func, or_
+from sqlalchemy import func
 from enum import Enum
-from ...core import SessionLocal, engine, Base
+from ...core import SessionLocal
 from .. import models, schemas
 
 
