@@ -12,13 +12,12 @@ COPY requirements.txt .
 RUN apt-get update && apt-get install -y \
     gcc \
     python3-dev \
-    musl-dev \
     libpq-dev \
 && pip install --upgrade pip
 
 # Install python packages and remove unnecessary packages
 RUN pip install --no-cache-dir -r requirements.txt \
-&& apt-get autoremove -y gcc python3-dev musl-dev libpq-dev \
+&& apt-get autoremove -y gcc python3-dev \
 && rm -rf /var/lib/apt/lists/*
 
 # Copy the rest of the application code
