@@ -10,6 +10,7 @@ import pandas as pd
 from fastapi.responses import JSONResponse
 from ...core import SessionLocal, engine, Base
 from .. import models, schemas
+# from .webhook import rules_dict
 
 
 # Create API router
@@ -37,6 +38,8 @@ async def read_issues(
     domain: str,
     limit: Optional[int] = None,
     rule_type: Optional[str] = None,
+    section508: Optional[bool] = None,
+    super_waggy: Optional[bool] = None,
     db: Session = Depends(get_db),
     tags=["Issues"],
     summary="Axe Issues per Filters"
@@ -57,7 +60,9 @@ async def read_issues(
         test.impact,
         test.target,
        test.html,
-       test.failure_summary
+       test.failure_summary,
+       test.section508,
+       test.super_waggy
     FROM targets.urls t
     INNER JOIN targets.domains d ON t.domain_id = d.id AND d.domain = :domain
     LEFT JOIN (
@@ -72,15 +77,18 @@ async def read_issues(
       ON s.id = r.scan_id
     INNER JOIN axe.tests test
       ON r.id = test.rule_id
-    WHERE s.id IS NOT NULL AND (:rule_type is NULL or test.rule_type = :rule_type)
+    WHERE s.id IS NOT NULL
+      AND (:rule_type is NULL or test.rule_type = :rule_type)
+      AND (:section508 is NULL or test.section508 = :section508)
+      AND (:super_waggy is NULL or test.super_waggy = :super_waggy)
     ORDER BY test.tested_at desc
     {f'LIMIT {limit}' if limit else ''}
     """)
 
-    result = db.execute(sql, {"domain": domain, "rule_type": rule_type}).fetchall()
+    result = db.execute(sql, {"domain": domain, "rule_type": rule_type, "section508": section508, "super_waggy": super_waggy}).fetchall()
 
     data = [
-        {k: (custom_encoder(v) if isinstance(v, datetime) else v) for k, v in row._asdict().items()}
+        {**{k: (custom_encoder(v) if isinstance(v, datetime) else v) for k, v in row._asdict().items()}}
         for row in result
     ]
 
