@@ -3,7 +3,8 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
-from ..core.database import Base
+from ...core import Base
+from .targets import Domain
 
 
 class Entity(Base):
@@ -19,4 +20,4 @@ class Entity(Base):
     active = Column(Boolean, default=False)  # Is this entity active?
 
     # Relationships
-    domains = relationship('targets.Domain', back_populates='org')
+    domains = relationship('Domain', back_populates='org')

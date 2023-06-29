@@ -3,7 +3,10 @@
 from sqlalchemy import Column, Integer, Boolean, ForeignKey, DateTime, BigInteger, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from ..core.database import Base
+from ...core import Base
+# from .orgs import Entity
+# from .axe import ScanData, Test
+
 
 
 class Domain(Base):
@@ -18,8 +21,8 @@ class Domain(Base):
     org_id = Column(Integer, ForeignKey('orgs.entities.id'))  # Corresponding Entity ID
 
     # Relationships
-    org = relationship('orgs.Entity', back_populates='domains')
-    urls = relationship('targets.Url', back_populates='domain')  # Relationship to urls
+    org = relationship('Entity', back_populates='domains')
+    urls = relationship('Url', back_populates='domain')
 
 
 class Url(Base):
@@ -56,4 +59,6 @@ class Url(Base):
     crawled_at = Column(DateTime(timezone=True))
 
     # Relationships
-    domain = relationship('targets.Domain', back_populates='urls')
+    domain = relationship('Domain', back_populates='urls')
+    scan_data = relationship('ScanData', back_populates='url')
+    tests = relationship('Test', back_populates='url')

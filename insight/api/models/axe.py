@@ -4,7 +4,8 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, B
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import JSONB
-from ..core.database import Base
+from ...core import Base
+from .targets import Url
 
 
 # Axe Schema
@@ -28,8 +29,8 @@ class ScanData(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    url = relationship('targets.Url', back_populates='scan_data')
-    rules = relationship('axe.Rule', back_populates='scan_data')
+    url = relationship('Url', back_populates='scan_data')
+    rules = relationship('Rule', back_populates='scan_data')
 
 
 class Rule(Base):
@@ -48,8 +49,8 @@ class Rule(Base):
     nodes = Column(JSONB)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
-    scan_data = relationship('axe.ScanData', back_populates='rules')
-    tests = relationship('axe.Test', back_populates='rule')
+    scan_data = relationship('ScanData', back_populates='rules')
+    tests = relationship('Test', back_populates='rule')
 
 
 class Test(Base):
@@ -69,5 +70,5 @@ class Test(Base):
     html = Column(String)
     failure_summary = Column(String)
 
-    rule = relationship('axe.Rule', back_populates='tests')
-    url = relationship('axe.Url', back_populates='tests')
+    rule = relationship('Rule', back_populates='tests')
+    url = relationship('Url', back_populates='tests')
