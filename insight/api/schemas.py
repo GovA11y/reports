@@ -1,14 +1,11 @@
+from typing import List, Optional
 from pydantic import BaseModel
-from typing import List
 
-class Url(BaseModel):
-    url: str
-    is_objective: bool
 
 class Domain(BaseModel):
     id: int
     domain: str
-    urls: List[Url] = []
+    url_count: Optional[int]
 
     class Config:
         orm_mode = True
