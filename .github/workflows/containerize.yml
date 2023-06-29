@@ -7,6 +7,9 @@ on:
       - 'requirements.txt'
       - 'insight/**'
 
+  workflow_dispatch:
+
+
 env:
   GHCR_REGISTRY: ghcr.io
   DOCKERHUB_REGISTRY: docker.io
