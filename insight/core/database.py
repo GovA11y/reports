@@ -1,7 +1,10 @@
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, registry
 import os
+
+# load .env variables
+load_dotenv()
 
 # Retrieving environment variables
 DB_USER = os.getenv("DB_USER")
@@ -18,4 +21,9 @@ engine = create_engine(
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
+# Instead of using declarative_base()
+# Base = declarative_base()
+
+# We use registry
+mapper_registry = registry()
+Base = mapper_registry.generate_base()
