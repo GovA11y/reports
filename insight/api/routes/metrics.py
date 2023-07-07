@@ -51,15 +51,16 @@ def read_domain(domain: str = Query(..., description="The domain name to get the
     - **output**: The output format; can be either json ('json') or csv ('csv'). Default is 'json'.
     """
     pattern = '%' + domain + '%'
-    query_results = db.query(models.Domain.id,
-                             models.Domain.domain,
-                             func.count(models.Url.url)).join(
-                             models.Url).filter(
-                             models.Domain.domain.ilike(pattern)).group_by(
-                             models.Domain.id,
-                             models.Domain.domain).order_by(
-                             func.count(models.Url.url).desc()).all()
-
+    query_results = db.query(models.Domain.id, models.Domain.domain, func.count(models.Url.url)).join(
+        models.Url).filter(
+        models.Domain.domain.ilike(pattern),
+        models.Domain.is_valid.is_(True)
+    ).group_by(
+        models.Domain.id,
+        models.Domain.domain
+    ).order_by(
+        func.count(models.Url.url).desc()
+    ).all()
     if not query_results:
         raise HTTPException(status_code=404, detail="Domain not found")
 

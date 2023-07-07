@@ -19,6 +19,7 @@ class Domain(Base):
     domain = Column(String, unique=True, nullable=False)  # Unique domain name
     active = Column(Boolean)  # Should we analyze this domain?
     org_id = Column(Integer, ForeignKey('orgs.entities.id'))  # Corresponding Entity ID
+    is_valid = Column(Boolean) # Is this domain validly formed?
 
     # Relationships
     org = relationship('Entity', back_populates='domains')
