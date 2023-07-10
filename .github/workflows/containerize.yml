@@ -2,10 +2,7 @@ name: 🏗️📤 Build and publish 🐳 images
 
 on:
   push:
-    paths:
-      - 'Dockerfile'
-      - 'requirements.txt'
-      - 'insight/**'
+
 
   workflow_dispatch:
 
