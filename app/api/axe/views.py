@@ -41,7 +41,7 @@ def axe_summary():
 @axe_bp.route('/results_raw', methods=['GET'])
 def axe_results_raw():
     raw_domain = request.args.get('domain', 'gsa.gov')
-    domain = f"%{raw_domain}"
+    domain = f"{raw_domain}"
     limit = request.args.get('limit')
     if limit is not None:
         limit = int(limit)
