@@ -1,4 +1,4 @@
-# File: api/domain/views.py
+# File: app/api/domain/__init__.py
 
 from flask import Blueprint, request, jsonify
 from ..database.utils.execute_query import execute_sql_from_file
