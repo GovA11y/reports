@@ -13,4 +13,4 @@ ON at.url_id=sub.url_id AND at.axe_id=sub.axe_id AND at.target=sub.target AND at
 WHERE at.domain LIKE '%s'
 AND rule_type = '%s'
 ORDER BY tested_at DESC
-LIMIT '%s';
+LIMIT %s;
