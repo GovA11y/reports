@@ -1,22 +1,19 @@
+# execute_query.py
+# Relative Path: app/api/database/utils/execute_query.py
+from sqlalchemy import text
 
+
+def row2dict(row):
+    return {column: str(value) for column, value in zip(row.keys(), row)}
 
 def execute_sql_from_file(conn, filename, domain):
-    # Open and read the file as a single buffer
-    fd = open(filename, 'r')
-    sql_file = fd.read()
-    fd.close()
+    with open(filename, 'r') as fd:
+        sql_file = fd.read()
 
-    # format SQL command
     formatted_sql_file = sql_file % domain
 
-    # Execute SQL commands
-    cursor = conn.cursor()
-    cursor.execute(formatted_sql_file)
+    result_proxy = conn.execute(text(formatted_sql_file))
 
-    # Fetch result
-    result = cursor.fetchall()
-
-    # Commit the transaction
-    conn.commit()
+    result = [dict(row) for row in result_proxy.fetchall()]
 
     return result

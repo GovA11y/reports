@@ -20,7 +20,7 @@ DB_PORT = os.getenv("DB_POSTGRES_PORT")
 SQLALCHEMY_DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL
+    SQLALCHEMY_DATABASE_URL, future=True
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -30,6 +30,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # We use registry
 mapper_registry = registry()
 Base = mapper_registry.generate_base()
+
+postgres_conn = SessionLocal
 
 
 def test_connection():

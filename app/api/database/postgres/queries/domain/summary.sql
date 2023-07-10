@@ -1,4 +1,4 @@
--- Relative Path: api/database/postgres/queries/domain/summary.sql
+-- Relative Path: app/api/database/postgres/queries/domain/summary.sql
 -- Selects the domain and subdomain of the search term along with how many urls each domain has
 SELECT
     targets.domains.id AS "domain_id",

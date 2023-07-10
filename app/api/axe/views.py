@@ -2,14 +2,14 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import text
 from app.api.database.postgres.connect import postgres_conn
-
+from app.api.database.clickhouse.connect import client as clickhouse_conn
 
 # Blueprint Configuration
 domain_bp = Blueprint(
     'domain_bp', __name__,
     template_folder='templates',
     static_folder='static',
-    url_prefix='/domain'
+    url_prefix='/axe'
 )
 
 
@@ -17,7 +17,7 @@ domain_bp = Blueprint(
 def domain_summary():
     raw_domain = request.args.get('domain', 'gsa.gov')
     domain = f"%{raw_domain}"
-    sql_file = "app/api/database/postgres/queries/domain/summary.sql"
+    sql_file = "app/api/database/clickhouse/queries/axe/domain_summary.sql"
 
     # Read sql file
     with open(sql_file) as file:
