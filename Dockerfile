@@ -20,6 +20,9 @@ RUN pip install --no-cache-dir -r requirements.txt \
     && apt-get autoremove -y gcc python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Make Log file
+RUN mkdir -p /app/logs
+
 
 # Env Variables
 ENV APP_PORT=3000
