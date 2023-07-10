@@ -33,7 +33,7 @@ def axe_summary():
         keys = [col[0] for col in rows[1]]
         for row in rows[0]:
             results.append({key: value for key,value in zip(keys, row)})
-        return jsonify(results)
+        return jsonify(results), 200, {"Content-Type": "application/json"}
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
