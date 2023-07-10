@@ -42,14 +42,15 @@ def axe_summary():
 def axe_results_raw():
     raw_domain = request.args.get('domain', 'gsa.gov')
     domain = f"%{raw_domain}"
+    limit = request.args.get('limit', '5000')
     sql_file = "app/api/database/clickhouse/queries/axe/current_violations.sql"
     rule_type = request.args.get('rule_type', 'violations')
-    logger.info(f'Request: Axe Raw Results\nDomain: {raw_domain}\nRule Type: {rule_type}')
+    logger.info(f'Request: Axe Raw Results\nDomain: {raw_domain}\nRule Type: {rule_type}\nLimit: {limit}')
 
     # Read sql file
     with open(sql_file) as file:
         sql_content = file.read()
-    formatted_sql_content = sql_content % (domain, rule_type)
+    formatted_sql_content = sql_content % (domain, rule_type, limit)
 
     results = []
     try:
