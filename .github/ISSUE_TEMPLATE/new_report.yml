@@ -1,0 +1,69 @@
+name: 🛠️ New Report
+description: Used to set up a new report for GovA11y
+title: <_ _ Name of Report _ _>
+labels: [🤔 Unrefined, 🛠️ Task, 📊 Report, 🚀 Feature Request]
+assignees:
+  - theboatymcboatface
+body:
+
+  - type: input
+    attributes:
+      label: Question
+      description: What specific question are you trying to answer with this report?
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Target Audience
+      description: Who is the intended audience or end user of this report?
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Input Options
+      description: What parameters or options would you like to include in this report? (e.g., filter by domain, rule type, impact level, etc.)
+      placeholder: Enter the desired input options for the report.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: expanded-output-format
+    attributes:
+      label: Output Format
+      description: Which output formats are acceptable for this report? (Select one or more)
+      options:
+        - label: CSV
+        - label: XLSX
+        - label: HTML
+        - label: XML
+        - label: YAML
+        - label: JSON
+        - label: Something Else
+
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team
+      description: Which primary data source will this report draw from? (Select one or more)
+      multiple: true
+      options:
+        - 🌐 Accessibility Scans
+        - 📊 Domain/URL Analysis
+        - 🏢 Department/Organizational Structure
+        - 🔍 Technology Stack Analysis
+        - 📈 Complexity Calculations
+        - 🏰 Security Assessments
+        - 🪢 Summary Reports by Domain/Organization/Technology
+        - ❔ Unknown/TBD/Other
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: References
+      description: Please provide any useful information or references related to this report (optional).
+    validations:
+      required: false
