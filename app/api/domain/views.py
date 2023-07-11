@@ -2,6 +2,7 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import text
 from app.api.database.postgres.connect import postgres_conn
+from ..utils import format_output
 
 
 # Blueprint Configuration
@@ -32,6 +33,7 @@ def domain_summary():
             keys = result_proxy.keys()
             for row in result_proxy:
                 results.append({key: value for key,value in zip(keys,row)})
-        return jsonify(results)
+        output_format = request.args.get('format', 'json')
+        return format_output(results, output_format, 'domain_summary')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
