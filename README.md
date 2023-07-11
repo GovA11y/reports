@@ -8,7 +8,7 @@
   <br clear="all">
 </div>
 
-[![🏗️📤 Build and publish 🐳 images](https://github.com/GovA11y/processor/actions/workflows/containerize.yml/badge.svg)](https://github.com/GovA11y/processor/actions/workflows/containerize.yml)
+[![🏗️📤 Build and publish 🐳 images](https://github.com/GovA11y/reports/actions/workflows/containerize.yml/badge.svg)](https://github.com/GovA11y/reports/actions/workflows/containerize.yml)
 
 
 
