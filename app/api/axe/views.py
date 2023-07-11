@@ -19,6 +19,8 @@ axe_bp = Blueprint(
 def axe_summary():
     raw_domain = request.args.get('domain', 'gsa.gov')
     domain = f"%{raw_domain}"
+
+
     sql_file = "app/api/database/clickhouse/queries/axe/domain_summary.sql"
     logger.info(f'Request: Axe Domain Summary\nDomain: {raw_domain}')
 
@@ -49,14 +51,30 @@ def axe_results_raw():
         limit = int(limit)
     else:
         limit = 5000
-    sql_file = "app/api/database/clickhouse/queries/axe/current_violations.sql"
-    rule_type = request.args.get('rule_type', 'violations')
-    logger.info(f'Request: Axe Raw Results\nDomain: {raw_domain}\nRule Type: {rule_type}\nLimit: {limit}')
+
+    # Time Filter
+    tested_from = request.args.get('tested_from')
+    tested_to = request.args.get('tested_to')
+
+    # Decide which SQL file to use
+    if tested_from and tested_to:
+        sql_file = "app/api/database/clickhouse/queries/axe/current_violations_time.sql"
+    else:
+        sql_file = "app/api/database/clickhouse/queries/axe/current_violations.sql"
+
+    rule_types = request.args.get('rule_type', 'inapplicable,passes,violations,incomplete')
+    rule_types = ', '.join([f"'{rt}'" for rt in rule_types.split(',')])
+    logger.info(f'Request: Axe Raw Results\nDomain: {raw_domain}\nRule Types: {rule_types}\nLimit: {limit}')
 
     # Read sql file
     with open(sql_file) as file:
         sql_content = file.read()
-    formatted_sql_content = sql_content % (domain, rule_type, limit)
+
+    # Format sql content based on parameters
+    if tested_from and tested_to:
+        formatted_sql_content = sql_content % (domain, rule_types, tested_from, tested_to, limit)
+    else:
+        formatted_sql_content = sql_content % (domain, rule_types, limit)
 
     results = []
     try:
