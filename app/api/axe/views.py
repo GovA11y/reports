@@ -4,6 +4,7 @@ from sqlalchemy import text
 from app.api.database.postgres.connect import postgres_conn
 from app.api.database.clickhouse.connect import client as clickhouse_conn
 from app.logging import logger
+from ..utils import format_output
 
 # Blueprint Configuration
 axe_bp = Blueprint(
@@ -33,7 +34,8 @@ def axe_summary():
         keys = [col[0] for col in rows[1]]
         for row in rows[0]:
             results.append({key: value for key,value in zip(keys, row)})
-        return jsonify(results), 200, {"Content-Type": "application/json"}
+        output_format = request.args.get('format', 'json')
+        return format_output(results, output_format, 'domain_summary')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -71,7 +73,8 @@ def axe_results_raw():
                         logger.error(f"Error decoding column '{key}': {str(e)}")
                 row_dict[key] = value
             results.append(row_dict)
-        return jsonify(results)
+        output_format = request.args.get('format', 'json')
+        return format_output(results, output_format, 'domain_summary')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
