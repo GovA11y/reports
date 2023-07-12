@@ -45,7 +45,7 @@ Returns a summary of information for a specific domain.
 
 ##### URL Parameters:
 
-- `domain` (Optional): Specifies the domain for which to return a summary. If not provided, defaults to 'gsa.gov'.
+- `domain` (Optional): Specifies the domain for which to return a summary. If not provided, defaults to 'nasa.gov'.
 - `format` (Optional): Specifies the output format of the results. The supported formats are CSV, XLSX, HTML, XML, YAML, and JSON. If not provided, defaults to JSON.
 
 ##### Output Format:
@@ -91,10 +91,20 @@ Returns raw results from Axe accessibility tests for a specific domain.
 
 ##### URL Parameters:
 
-- `domain` (Optional): Specifies the domain for which to return test results. If not provided, defaults to 'gsa.gov'.
-- `limit` (Optional): Specifies the number of results to return. If not provided, defaults to '5000'.
-- `rule_type` (Optional): Specifies the type of rules to include in the results. If not provided, defaults to 'violations'.
-- `format` (Optional): Specifies the output format of the results. The supported formats are CSV, XLSX, HTML, XML, YAML, and JSON. If not provided, defaults to JSON.
+- **`domain`** (Optional): Specifies the domain for which to return test results. If not provided, defaults to 'nasa.gov'.
+- **`limit`** (Optional): Specifies the number of results to return. If not provided, defaults to '5000'.
+- **`rule_type`** (Optional): Specifies the type of rules to include in the results.
+  If not provided, defaults to all types. To select multiple types, enter them as a comma separated list.
+
+  Example: `&rule_type=violations` or `&rule_type=violations,inapplicable`
+  Possible values: `inapplicable`, `passes`, `violations`, `incomplete`
+
+- **`format`** (Optional): Specifies the output format of the results. The supported formats are CSV, XLSX, HTML, XML, YAML, and JSON. If not provided, defaults to JSON.
+
+  The following **MUST** include both `tested_from` & `tested_to` for a result. Format dates like this: `YYYY-MM-DD`
+
+- **`tested_from`** (Optional): Specifies the oldest test included in results.
+- **`tested_to`** (Optional): Specifies the most recent test included in results.
 
 ##### Output Format:
 You can specify the output format by including the `format` URL parameter in your request. The supported formats are `CSV`, `XLSX`, `HTML`, `XML`, `YAML`, and `JSON` (default).
@@ -125,5 +135,28 @@ The response fields can vary depending on the specifics of the test results. A t
 - `sub.target`: The target element in the sub-test (if applicable).
 - `max_tested_at`: The latest timestamp when the test was performed (if applicable).
 
+
+#### `/axe/domain_error_summary`
+Provides a summary of Axe accessibility test results specifically for domains. This means that you can obtain an overview of the accessibility issues identified during the tests for a particular domain or set of domains.
+##### Method: `GET`
+
+
+##### URL Parameters:
+
+- `domain` (Optional): Specifies the domain & sub-domains for which to return a summary. If not provided, defaults to 'nasa.gov'.
+- `format` (Optional): Specifies the output format of the results. The supported formats are CSV, XLSX, HTML, XML, YAML, and JSON. If not provided, defaults to JSON.
+
+##### Output Format:
+You can specify the output format by including the `format` URL parameter in your request. The supported formats are `CSV`, `XLSX`, `HTML`, `XML`, `YAML`, and `JSON` (default).
+
+##### Response Fields:
+The response fields can vary depending on the specifics of the test results. A typical response would include fields such as:
+
+- `domain_name`: The name of the domain for which the tests were run.
+- `urls_tested`: The number of URLs from the domain that were tested.
+- `count_critical`: The number of critical accessibility violations.
+- `count_serious`: The number of serious accessibility violations.
+- `count_moderate`: The number of moderate accessibility violations.
+- `count_minor`: The total number minor accessibility violations.
 
 
