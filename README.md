@@ -130,9 +130,6 @@ The response fields can vary depending on the specifics of the test results. A t
 - `active`: Indicates if the test result is active.
 - `section508`: Indicates if the test result is Section 508 compliant.
 - `super_waggy`: An attribute related to Wagtail CMS accessibility evaluation (if applicable).
-- `sub.url_id`: The unique identifier of the URL in the sub-test (if applicable).
-- `sub.axe_id`: The unique identifier of the Axe accessibility test in the sub-test (if applicable).
-- `sub.target`: The target element in the sub-test (if applicable).
 - `max_tested_at`: The latest timestamp when the test was performed (if applicable).
 
 
