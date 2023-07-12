@@ -157,3 +157,36 @@ The response fields can vary depending on the specifics of the test results. A t
 - `count_minor`: The total number minor accessibility violations.
 
 
+
+### Activity
+
+These endpoints provide data from GovA11y Activity
+
+#### `imports/axe_tests`
+Returns a summary of Axe accessibility tests imported into ClickHouse
+##### Method: `GET`
+
+
+##### URL Parameters:
+
+- `domain` (Optional): Specifies the domain for which to return a summary. If not provided, defaults to 'gsa.gov'.
+ **`format`** (Optional): Specifies the output format of the results. The supported formats are CSV, XLSX, HTML, XML, YAML, and JSON. If not provided, defaults to JSON.
+
+- **`imported_from`** (Optional): Specifies the oldest test included in results. Format dates like this: `YYYY-MM-DD` Defaults to beginning of time.
+- **`imported_to`** (Optional): Specifies the most recent test included in results. Format dates like this: `YYYY-MM-DD` Defaults to end of time.
+
+
+##### Output Format:
+You can specify the output format by including the `format` URL parameter in your request. The supported formats are `CSV`, `XLSX`, `HTML`, `XML`, `YAML`, and `JSON` (default).
+
+##### Response Fields:
+The response fields can vary depending on the specifics of the test results. A typical response would include fields such as:
+
+- `domain`: The name of the domain for which the tests were run.
+- `imported_total`: The total number of axe tests imported for the `domain`.
+- `imported_range`: The number of axe tests imported for the `domain` within the specified time range.
+- `imported_minute_15`: The number of axe tests imported for the `domain` within the past 15 minutes.
+- `imported_hour_1`: The number of axe tests imported for the `domain` within the past 1 hour.
+- `imported_hour_12`: The number of axe tests imported for the `domain` within the past 12 hours.
+- `imported_week`: The number of axe tests imported for the `domain` within the past week.
+- `imported_month`: The number of axe tests imported for the `domain` within the past month.
