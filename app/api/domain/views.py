@@ -16,7 +16,7 @@ domain_bp = Blueprint(
 
 @domain_bp.route('/summary', methods=['GET'])
 def domain_summary():
-    raw_domain = request.args.get('domain', 'gsa.gov')
+    raw_domain = request.args.get('domain', 'nasa.gov')
     domain = f"%{raw_domain}"
     sql_file = "app/api/database/postgres/queries/domain/summary.sql"
 

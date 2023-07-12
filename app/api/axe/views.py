@@ -44,7 +44,7 @@ def axe_summary():
 
 @axe_bp.route('/results_raw', methods=['GET'])
 def axe_results_raw():
-    raw_domain = request.args.get('domain', 'gsa.gov')
+    raw_domain = request.args.get('domain', 'nasa.gov')
     domain = f"{raw_domain}"
     limit = request.args.get('limit')
     if limit is not None:
@@ -97,3 +97,33 @@ def axe_results_raw():
         return jsonify({"error": str(e)}), 500
 
 
+@axe_bp.route('/domain_error_summary', methods=['GET'])
+def axe_domain_error_summary():
+    raw_domain = request.args.get('domain', 'nasa.gov')
+    domain = f"%{raw_domain}"
+    logger.info(f'Request: Axe Error Summary\nDomain: {raw_domain}')
+    # Set the SQL File
+    sql_file = "app/api/database/clickhouse/queries/axe/domain_error_summary.sql"
+    # Read sql file
+    with open(sql_file) as file:
+        sql_content = file.read()
+    formatted_sql_content = sql_content % (domain)
+    results = []
+    try:
+        # Run the query using ClickHouse's execute method
+        rows = clickhouse_conn.execute(formatted_sql_content, with_column_types=True)
+        keys = [col[0] for col in rows[1]]
+        for row in rows[0]:
+            row_dict = {}
+            for key, value in zip(keys, row):
+                if isinstance(value, bytes):
+                    try:
+                        value = value.decode('latin1')
+                    except Exception as e:
+                        logger.error(f"Error decoding column '{key}': {str(e)}")
+                row_dict[key] = value
+            results.append(row_dict)
+        output_format = request.args.get('format', 'json')
+        return format_output(results, output_format, 'axe_domain_error_summary')
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
