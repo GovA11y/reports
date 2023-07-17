@@ -32,11 +32,20 @@ def generate_a11yscore(domain):
         weighted_violations = weight_normalized_violations(normalized_result)
 
         # Calculate Score
-
+        # Prepare
+        # Prepare parameters for score calculation
+        score_resolution_data = {
+            'WVc': weighted_violations['WVc'],
+            'WVs': weighted_violations['WVs'],
+            'WVmo': weighted_violations['WVmo'],
+            'WVmi': weighted_violations['WVmi'],
+            'NUt': normalized_result['NUt'],
+            'NPt': normalized_result['NPt']
+        }
+        a11yscore = resolve_score(score_resolution_data)
 
         # Below is just so I can test things... not real...
-        a11yscore = 42
-        logger.warning(f'BS Placeholder for A11yScore: {a11yscore}')
+        logger.warning(f'A11yScore: {a11yscore}')
         return a11yscore
     else:
         logger.error("Error in getting values from ClickHouse")

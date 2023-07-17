@@ -32,3 +32,4 @@ def weight_normalized_violations(normalized_violations):
     logger.debug(f'Weighted Violations:\n{weighted_violations}')
     return weighted_violations
 
+

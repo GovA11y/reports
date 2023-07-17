@@ -8,7 +8,7 @@ These are options which are used to select which URLs are used to generate the r
 
 -   domain : The domain within which the URLs are located.
 -   axe tag : Specific axe-core rule tags (e.g., wcag2a, wcag2aa) to filter the rules applied. (not in this version)
--   transformation: The type of transformation to apply to the data. Options include "logarithmic", "exponential", and "none".
+-   transformation : The type of transformation to apply to the data. Options include "logarithmic", "exponential", and "none". (not in this version)
 
 ## Severity Levels
 
@@ -16,8 +16,8 @@ These static weights are applied to each of the severity levels. By assigning we
 
 -   Sc = severity of critical violations
 -   Ss = severity of serious violations
--   Sm = severity of moderate violations
--   Smn = severity of minor violations
+-   Smo = severity of moderate violations
+-   Smi = severity of minor violations
 
 ## Input Values
 
@@ -45,18 +45,36 @@ These are generated from the list of urls.
 
 ## Normalization
 
+Handled in app/api/metrics/a11yscore/normalize.py
+
 Normalization is used to adjust the counts of violations and passes, making them comparable across different scales. This step is crucial as it ensures that large counts of violations or passes don't disproportionately influence the final score.
 
 The normalization process involves dividing each count by the total count of violations or passes. This process produces a proportional value, which can be interpreted as the relative contribution of each violation or pass to the total count. Normalized values are then used in subsequent computations.
 
 ### Output Values
 
-## Axe ID Weight
+-   `NVt` : Normalized Total Violations
+-   `NVc` : Normalized Critical Violations
+-   `NVs` : Normalized Severe Violations
+-   `NVmo` : Normalized Moderate Violations
+-   `NVmi` : Normalized Minor Violations
 
-Weighting by each individual axe_id
+## Weighting
 
-## Normalization
+### Weight by Violation Severity
 
-Normalization is used to adjust the counts of violations and passes, making them comparable across different scales. This step is crucial as it ensures that large counts of violations or passes don't disproportionately influence the final score.
+Handled by `weight_normalized_violations` function in [weight.py](app/api/metrics/a11yscore/weight.py)
 
-The normalization process involves dividing each count by the total count of violations or passes. This process produces a proportional value, which can be interpreted as the relative contribution of each violation or pass to the total count. Normalized values are then used in subsequent computations.
+**Outputs**
+
+-   `WVt` : Weighted Total Violations
+-   `WVc` : Weighted Critical Violations
+-   `WVs` : Weighted Severe Violations
+-   `WVmo` : Weighted Moderate Violations
+-   `WV\mi` : Weighted Minor Violations
+
+## Calculation
+
+This takes the normalized and weighted values.
+
+At the end of **Calculation**, we have a single number for the domain that can be compared to all domain sizes. CMS.gov with over 100k urls can be compared to plainlanguage.gov with its 91 urls.
