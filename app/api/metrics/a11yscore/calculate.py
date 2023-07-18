@@ -15,7 +15,7 @@ def resolve_score(score_data):
     Pt = score_data['NPt']
 
     # Total URLs, which is 1 because you are normalizing per URL
-    Ut = score_data['NUt']
+    Ut = score_data['Ut']
 
     logger.info(f"\nA11yScore Calculation Variables:\n\
                   Weighted Violations Critical (WVc): {score_data['WVc']}\n\
@@ -25,10 +25,13 @@ def resolve_score(score_data):
                   Total Weighted Violations: {total_weighted_violations}\n\
                   Total Passes (Pt): {Pt}\n\
                   Total URLs (Ut): {Ut}" )
+    logger.info(f"Score Formula:{score_data}")
 
     # Calculate A11yScore
-    a11yscore = (total_weighted_violations - Pt) / Ut
-
+    # a11yscore = (total_weighted_violations - Pt) / Ut
+    a11yscore = (total_weighted_violations) / Ut
     logger.info(f"A11yScore: {a11yscore}")  # Log the generated score
 
     return a11yscore
+
+# def consolidate_variables
