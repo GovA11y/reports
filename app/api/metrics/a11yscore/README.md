@@ -10,6 +10,12 @@ These are options which are used to select which URLs are used to generate the r
 -   axe tag : Specific axe-core rule tags (e.g., wcag2a, wcag2aa) to filter the rules applied. (not in this version)
 -   transformation : The type of transformation to apply to the data. Options include "logarithmic", "exponential", and "none". (not in this version)
 
+## Endpoint
+
+```
+https://reports.gova11y.io/metrics/a11yscore?format=html&domain=www.va.gov
+```
+
 ## Severity Levels
 
 These static weights are applied to each of the severity levels. By assigning weights to different violation types, the algorithm recognizes that not all accessibility issues impact users equally.
@@ -78,3 +84,7 @@ Handled by `weight_normalized_violations` function in [weight.py](app/api/metric
 This takes the normalized and weighted values.
 
 At the end of **Calculation**, we have a single number for the domain that can be compared to all domain sizes. CMS.gov with over 100k urls can be compared to plainlanguage.gov with its 91 urls.
+
+```
+a11yscore = (total_weighted_violations) / Ut
+```
