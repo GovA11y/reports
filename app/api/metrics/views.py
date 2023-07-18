@@ -1,8 +1,5 @@
 # app/api/metrics/views.py
 from flask import Blueprint, jsonify, request
-from sqlalchemy import text
-from app.api.database.postgres.connect import postgres_conn
-from app.api.database.clickhouse.connect import client as clickhouse_conn
 from app.logging import logger
 from ..utils import format_output
 from .a11yscore import calculate_score
@@ -23,7 +20,21 @@ def return_a11yscore():
     domain = f"{raw_domain}"
     logger.info(f'Request: A11y Score Requested for\nDomain: {raw_domain}')
 
-    # get the score information
+    # Get the score information
     score_info = calculate_score(domain)
 
-    return jsonify(score_info)
+    # Check if the user specified the output format
+    output_format = request.args.get('format', 'json')
+
+    if output_format == 'json':
+        return jsonify(score_info)
+    else:
+        # Convert the score_info JSON to an index-based format
+        formatted_score_info = {}
+        for key, value in score_info.items():
+            formatted_score_info[key] = [value]
+
+        return format_output(formatted_score_info, output_format, 'a11yscore_data')
+
+
+

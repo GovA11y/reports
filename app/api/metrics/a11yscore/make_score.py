@@ -6,7 +6,6 @@ from .calculate import resolve_score
 from .get_data import get_from_clickhouse
 
 
-# app/api/metrics/a11yscore/make_score.py
 def generate_a11yscore(domain):
     # Get A11yScore Values from ClickHouse
     raw_result = get_from_clickhouse(domain)
@@ -34,8 +33,10 @@ def generate_a11yscore(domain):
         }
         a11yscore = resolve_score(score_data)
 
-        # Below is just so I can test things... not real...
-        return a11yscore
+        # Add a11yscore
+        score_data['a11yscore'] = a11yscore
+        a11yscore_data = {**score_data, **raw_result}
+        return a11yscore_data
     else:
         logger.error("Error in getting values from ClickHouse")
 
