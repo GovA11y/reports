@@ -14,7 +14,7 @@ metrics_bp = Blueprint(
 )
 
 
-@metrics_bp.route('/score/a11y', methods=['GET'])
+@metrics_bp.route('/a11yscore', methods=['GET'])
 def return_a11yscore():
     raw_domain = request.args.get('domain', 'nasa.gov')
     domain = f"{raw_domain}"
