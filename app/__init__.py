@@ -4,6 +4,7 @@ from flask import Flask
 from app.api.domain.views import domain_bp
 from app.api.axe.views import axe_bp
 from app.api.activity.views import activity_bp
+from app.api.metrics.views import metrics_bp
 
 
 def create_app():
@@ -13,5 +14,6 @@ def create_app():
     app.register_blueprint(domain_bp)
     app.register_blueprint(axe_bp)
     app.register_blueprint(activity_bp)
+    app.register_blueprint(metrics_bp)
 
     return app
