@@ -75,6 +75,7 @@ The normalization process involves dividing each count by the total count of vio
 -   `NVs` : Normalized Severe Violations
 -   `NVmo` : Normalized Moderate Violations
 -   `NVmi` : Normalized Minor Violations
+-   `NPt` : Normalized Passing Tests
 
 ## Weighting
 
@@ -88,7 +89,7 @@ Handled by `weight_normalized_violations` function in [weight.py](app/api/metric
 -   `WVc` : Weighted Critical Violations
 -   `WVs` : Weighted Severe Violations
 -   `WVmo` : Weighted Moderate Violations
--   `WV\mi` : Weighted Minor Violations
+-   `WVmi` : Weighted Minor Violations
 
 ## Calculation
 
