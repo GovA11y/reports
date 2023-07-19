@@ -1,9 +1,11 @@
 # run.py
 
 import os
-from app import create_app
+from app import create_app, startup
 
 app = create_app()
+
+startup()
 
 if __name__ == '__main__':
     # Use the APP_PORT environment variable
