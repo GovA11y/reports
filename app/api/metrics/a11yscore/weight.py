@@ -30,6 +30,7 @@ def weight_normalized_violations(normalized_violations):
         "WVmi": NVmi * severity_weights.get('Smi', 1.0)
     }
     logger.debug(f'Weighted Violations:\n{weighted_violations}')
-    return weighted_violations
+    weighted_violations_response = {**weighted_violations, **severity_weights}
+    return weighted_violations_response
 
 

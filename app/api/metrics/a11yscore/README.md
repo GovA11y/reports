@@ -10,6 +10,17 @@ These are options which are used to select which URLs are used to generate the r
 -   axe tag : Specific axe-core rule tags (e.g., wcag2a, wcag2aa) to filter the rules applied. (not in this version)
 -   transformation : The type of transformation to apply to the data. Options include "logarithmic", "exponential", and "none". (not in this version)
 
+-   "NPt": Normalized passes.
+-   "NUt": Normalized URLs (presumably, this is 1.0 because you're normalizing against the total URLs in the current domain).
+-   "NVc", "NVmi", "NVmo", "NVs", "NVt": Normalized counts for violations of type critical, minor, moderate, serious, and total violations respectively.
+-   "Pt": Total passes.
+-   "Sc", "Smi", "Smo", "Ss": Severity weightings for each violation type (critical, minor, moderate, serious).
+-   "Ut": Total URLs.
+-   "Vc", "Vmi", "Vmo", "Vs", "Vt": Counts for violations of type critical, minor, moderate, serious, and total violations respectively.
+-   "WVc", "WVmi", "WVmo", "WVs": Weighted violations of type critical, minor, moderate, serious.
+-   "a11yscore": The current accessibility score.
+-   "domain": The domain being evaluated.
+
 ## Endpoint
 
 ```

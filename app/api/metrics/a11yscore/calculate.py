@@ -2,36 +2,43 @@
 from app.logging import logger
 
 """
-
+Final calculation
 """
 
 def resolve_score(score_data):
-    logger.debug('Calculating Score...')
+    logger.debug('Calculating Scores...')
 
+    ASV = calc_a11yscore(score_data)
+    logger.debug(f'A11yScore: {ASV["a11yscore"]}')
+
+    impacts = ['ASVc', 'ASVs', 'ASVmo', 'ASVmi']
+    a11yscores = {
+        'ASV': ASV['a11yscore']
+    }
+
+    # Calculate A11yScores for each Impact
+    for impact in impacts:
+        score = impact_a11yscores(impact, score_data)
+        logger.debug(f'{impact}: {score}')
+        a11yscores[impact] = score
+
+    return a11yscores
+
+
+def calc_a11yscore(score_data):
     # Total weighted violations
-    total_weighted_violations = score_data['WVc'] + score_data['WVs'] + score_data['WVmo'] + score_data['WVmi']
+    WVtotal = score_data['WVc'] + score_data['WVs'] + score_data['WVmo'] + score_data['WVmi']
+    a11yscore = (WVtotal) / (score_data['NVt'] + score_data['NPt'])
+    response = {'WVtotal':WVtotal,'a11yscore':a11yscore}
+    return response
 
-    # Total passes
-    Pt = score_data['NPt']
 
-    # Total URLs, which is 1 because you are normalizing per URL
-    Ut = score_data['Ut']
+def impact_a11yscores(impact,score_data):
+    # Replace the 'AS' prefix with 'WV' to get the corresponding score_data key
+    score_key = impact.replace('ASV', 'WV')
 
-    logger.info(f"\nA11yScore Calculation Variables:\n\
-                  Weighted Violations Critical (WVc): {score_data['WVc']}\n\
-                  Weighted Violations Serious (WVs): {score_data['WVs']}\n\
-                  Weighted Violations Moderate (WVmo): {score_data['WVmo']}\n\
-                  Weighted Violations Minor (WVmi): {score_data['WVmi']}\n\
-                  Total Weighted Violations: {total_weighted_violations}\n\
-                  Total Passes (Pt): {Pt}\n\
-                  Total URLs (Ut): {Ut}" )
-    logger.info(f"Score Formula:{score_data}")
+    if score_key in score_data:
+        score = score_data[score_key] / (score_data['NVt'] + score_data['NPt'])
+        return score
 
-    # Calculate A11yScore
-    # a11yscore = (total_weighted_violations - Pt) / Ut
-    a11yscore = (total_weighted_violations) / Ut
-    logger.info(f"A11yScore: {a11yscore}")  # Log the generated score
-
-    return a11yscore
-
-# def consolidate_variables
+    return None

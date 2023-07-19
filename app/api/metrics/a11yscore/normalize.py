@@ -4,6 +4,7 @@ from app.logging import logger
 
 def normalize(data):
     total_urls = data['Ut']
+    total_violations = data['Vt']
     normalized_data = {
         'NVc': data['Vc'] / total_urls if total_urls != 0 else 0,
         'NVs': data['Vs'] / total_urls if total_urls != 0 else 0,

@@ -22,20 +22,16 @@ def generate_a11yscore(domain):
         # Calculate Score
         # Prepare
         # Prepare parameters for score calculation
-        score_data = {
-            'WVc': weighted_violations['WVc'],
-            'WVs': weighted_violations['WVs'],
-            'WVmo': weighted_violations['WVmo'],
-            'WVmi': weighted_violations['WVmi'],
-            'NUt': normalized_result['NUt'],
-            'NPt': normalized_result['NPt'],
-            'Ut': raw_result['Ut']
-        }
-        a11yscore = resolve_score(score_data)
+        score_data = {**raw_result,
+            **weighted_violations,
+            **normalized_result,
+            'domain': domain
+            }
+        a11yscores = resolve_score(score_data)
 
         # Add a11yscore
-        score_data['a11yscore'] = a11yscore
-        a11yscore_data = {**score_data, **raw_result}
+        # score_data['a11yscore'] = a11yscore
+        a11yscore_data = {**score_data, **raw_result, **normalized_result, **weighted_violations, **a11yscores}
         return a11yscore_data
     else:
         logger.error("Error in getting values from ClickHouse")
