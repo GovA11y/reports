@@ -64,6 +64,7 @@ The normalization process involves dividing each count by the total count of vio
 -   `NVs` : Normalized Severe Violations
 -   `NVmo` : Normalized Moderate Violations
 -   `NVmi` : Normalized Minor Violations
+-   `NPt` : Normalized Passing Tests
 
 ## Weighting
 
