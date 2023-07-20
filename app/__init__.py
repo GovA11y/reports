@@ -66,7 +66,6 @@ def configure_pyroscope():
         oncpu=False,
         native=True,
         gil_only=True,
-        log_level=os.getenv("LOG_LEVEL"),
         tags=tags,
     )
     logger.info('Pyroscope Configured')
