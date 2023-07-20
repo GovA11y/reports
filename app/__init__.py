@@ -65,7 +65,6 @@ def configure_pyroscope():
         oncpu=False,
         native=True,
         gil_only=True,
-        log_level="info",
         tags=tags,
     )
 
