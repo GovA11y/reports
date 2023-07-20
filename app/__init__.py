@@ -30,6 +30,7 @@ def create_app():
 
 
 def configure_pyroscope():
+    logger.info('Configuring Pyroscope')
     host = socket.gethostname()
     platform_info = platform.platform()
     python_version = platform.python_version()
@@ -41,7 +42,7 @@ def configure_pyroscope():
     python_implementation = platform.python_implementation()
     python_compiler = platform.python_compiler()
     python_build = platform.python_build()
-
+    logger.debug('Pyroscope Vars Imported, Now Setting Tags...')
     tags = {
         "host": host,
         "platform_info": platform_info,
@@ -55,7 +56,7 @@ def configure_pyroscope():
         "python_compiler": python_compiler,
         "python_build": python_build,
     }
-
+    logger.debug('Pyroscope Tags Set')
     pyroscope.configure(
         application_name=os.getenv("PYROSCOPE_APPLICATION_NAME"),
         server_address=os.getenv("PYROSCOPE_SERVER"),
@@ -65,13 +66,16 @@ def configure_pyroscope():
         oncpu=False,
         native=True,
         gil_only=True,
+        log_level=os.getenv("LOG_LEVEL"),
         tags=tags,
     )
-
+    logger.info('Pyroscope Configured')
 
 
 
 
 def startup():
-    start_scheduled_jobs()
     configure_pyroscope()
+    logger.info('Starting Scheduled Jobs')
+    start_scheduled_jobs()
+    logger.info('Scheduled Jobs Started')
