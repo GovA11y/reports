@@ -16,7 +16,7 @@ activity_bp = Blueprint(
 )
 
 
-@activity_bp.route('/imports/axe_tests', methods=['GET'])
+@activity_bp.route('/imports_axe', methods=['GET'])
 def make_import_axe_rules():
     raw_domain = request.args.get('domain', 'nasa.gov')
     domain = f"%{raw_domain}"

@@ -40,31 +40,12 @@ def configure_pyroscope():
     python_implementation = platform.python_implementation()
     python_compiler = platform.python_compiler()
     python_build = platform.python_build()
-    logger.debug('Pyroscope Vars Imported, Now Setting Tags...')
-    tags = {
-        "host": host,
-        "platform_info": platform_info,
-        "python_version": python_version,
-        "host_os": host_os,
-        "host_os_release": host_os_release,
-        "host_os_version": host_os_version,
-        "host_machine_type": host_machine_type,
-        "host_processor": host_processor,
-        "python_implementation": python_implementation,
-        "python_compiler": python_compiler,
-        "python_build": python_build,
-    }
-    logger.debug('Pyroscope Tags Set')
+    logger.debug('Pyroscope Vars Imported...')
+
     pyroscope.configure(
         application_name=os.getenv("PYROSCOPE_APPLICATION_NAME"),
         server_address=os.getenv("PYROSCOPE_SERVER"),
         auth_token=os.getenv("PYROSCOPE_API_KEY"),
-        sample_rate=100,
-        detect_subprocesses=False,
-        oncpu=True,
-        native=False,
-        gil_only=True,
-        tags=tags,
     )
     logger.info('Pyroscope Configured')
 
