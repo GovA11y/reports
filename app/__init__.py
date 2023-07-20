@@ -27,8 +27,6 @@ def create_app():
     return app
 
 
-
-
 def configure_pyroscope():
     logger.info('Configuring Pyroscope')
     host = socket.gethostname()
@@ -62,9 +60,9 @@ def configure_pyroscope():
         server_address=os.getenv("PYROSCOPE_SERVER"),
         auth_token=os.getenv("PYROSCOPE_API_KEY"),
         sample_rate=100,
-        detect_subprocesses=True,
-        oncpu=False,
-        native=True,
+        detect_subprocesses=False,
+        oncpu=True,
+        native=False,
         gil_only=True,
         tags=tags,
     )
