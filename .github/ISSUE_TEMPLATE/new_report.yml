@@ -42,7 +42,7 @@ body:
         - 🔍 Technology Stack Analysis
         - 📈 Complexity Calculations
         - 🏰 Security Assessments
-        - 🪢 Summary Reports by Domain/Organization/Technology
+        - 🪢 Summary Reports (Domain/Org/Tech)
         - ❔ Unknown/TBD/Other
     validations:
       required: true
