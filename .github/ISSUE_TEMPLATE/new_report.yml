@@ -24,8 +24,7 @@ body:
     attributes:
       label: Input Options
       description: What parameters or options would you like to include in this report? (e.g., filter by domain, rule type, impact level, etc.)
-      placeholder: \-[ ] domain
-                    \-[ ] axe_id
+      placeholder: "-[ ] domain\n-[ ] axe_id"
     validations:
       required: true
 
@@ -33,10 +32,10 @@ body:
     attributes:
       label: Report Output
       description: The columns this report will output
-      placeholder: \-[ ] domain
-                    \-[ ] axe_id
+      placeholder: "-[ ] domain\n-[ ] axe_id"
     validations:
       required: true
+
 
 
   - type: dropdown
