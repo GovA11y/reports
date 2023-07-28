@@ -28,20 +28,6 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
-    id: expanded-output-format
-    attributes:
-      label: Output Format
-      description: Which output formats are acceptable for this report? (Select one or more)
-      options:
-        - label: CSV
-        - label: XLSX
-        - label: HTML
-        - label: XML
-        - label: YAML
-        - label: JSON
-        - label: Something Else
-
 
   - type: dropdown
     id: team
