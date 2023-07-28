@@ -32,7 +32,7 @@ body:
     attributes:
       label: Report Output
       description: The columns this report will output
-      placeholder: "-[ ] domain\n-[ ] axe_id"
+      placeholder: "-[ ] url\n-[ ] count_of_..."
     validations:
       required: true
 
