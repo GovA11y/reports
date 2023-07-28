@@ -1,7 +1,7 @@
 name: 📊 New Report
 description: Used to set up a new report for GovA11y
 title: <_ _ Name of Report _ _>
-labels: [🤔 Unrefined, 🛠️ Task, 📑 Report, 🚀 Feature Request, 🆕 New]
+labels: [🤔 Unrefined, 📑 Report]
 assignees:
   - theboatymcboatface
 body:
@@ -24,7 +24,17 @@ body:
     attributes:
       label: Input Options
       description: What parameters or options would you like to include in this report? (e.g., filter by domain, rule type, impact level, etc.)
-      placeholder: Enter the desired input options for the report.
+      placeholder: \-[ ] domain
+                    \-[ ] axe_id
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Report Output
+      description: The columns this report will output
+      placeholder: \-[ ] domain
+                    \-[ ] axe_id
     validations:
       required: true
 
