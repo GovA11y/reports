@@ -1,7 +1,7 @@
 name: 📊 New Report
 description: Used to set up a new report for GovA11y
 title: <_ _ Name of Report _ _>
-labels: [🤔 Unrefined, 🛠️ Task, 📊 Report, 🚀 Feature Request]
+labels: [🤔 Unrefined, 🛠️ Task, 📑 Report, 🚀 Feature Request, 🆕 New]
 assignees:
   - theboatymcboatface
 body:
@@ -30,9 +30,9 @@ body:
 
 
   - type: dropdown
-    id: team
+    id: data_source
     attributes:
-      label: Team
+      label: Data Source
       description: Which primary data source will this report draw from? (Select one or more)
       multiple: true
       options:
@@ -46,6 +46,7 @@ body:
         - ❔ Unknown/TBD/Other
     validations:
       required: true
+
 
   - type: textarea
     attributes:
