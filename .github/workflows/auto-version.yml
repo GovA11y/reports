@@ -1,0 +1,92 @@
+# .github/workflows/auto-version.yml
+# Resources:
+# https://github.com/marketplace/actions/git-semantic-version#git-based-semantic-versioning
+# https://github.com/marketplace/actions/sentry-release
+# https://github.com/marketplace/actions/create-release
+# Auto-generates version for commits
+
+name: Auto Versioning and Release
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'assets/**'
+      - '.github/**'
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history and tags
+
+      - name: Generate Semantic Version
+        id: version
+        uses: PaulHatch/semantic-version@v5.0.3
+        with:
+          tag_prefix: "v"
+          major_pattern: "(MAJOR)"
+          minor_pattern: "(MINOR)"
+          # Additional parms here...
+
+      - name: Print new version
+        run: echo "New version is ${{ steps.version.outputs.version }}"
+
+      - name: Configure Git user
+        run: |
+          git config user.name "${{ secrets.BOT_NAME }}"
+          git config user.email "${{ secrets.BOT_EMAIL }}"
+
+      - name: Tag the new version
+        run: |
+          git tag v${{ steps.version.outputs.version }}
+          git push origin v${{ steps.version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+  create-release:
+    needs: versioning
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          artifacts: "" # You can specify the artifacts to upload here
+          body: "Auto-generated release from v${{ needs.versioning.outputs.version }}"
+          name: "Release v${{ needs.versioning.outputs.version }}"
+          tag: "v${{ needs.versioning.outputs.version }}"
+          token: ${{ secrets.BOT_TOKEN }}
+
+  configure-sentry:
+    needs: create-release
+    name: Configure Sentry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+        with:
+          environment: production
