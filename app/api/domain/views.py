@@ -42,7 +42,7 @@ def domain_summary():
 # List active domains
 @domain_bp.route('/list', methods=['GET'])
 def domain_list():
-    sql_file = "app/api/database/postgres/queries/domain/summary.sql"
+    sql_file = "app/api/database/postgres/queries/domain/list_domains.sql"
 
     # Read sql file
     with open(sql_file) as file:
