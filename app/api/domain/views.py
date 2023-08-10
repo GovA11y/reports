@@ -37,3 +37,27 @@ def domain_summary():
         return format_output(results, output_format, 'domain_summary')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+# List active domains
+@domain_bp.route('/list', methods=['GET'])
+def domain_list():
+    sql_file = "app/api/database/postgres/queries/domain/summary.sql"
+
+    # Read sql file
+    with open(sql_file) as file:
+        sql_content = file.read()
+    formatted_sql_content = sql_content
+
+    results = []
+    try:
+        # Established database connection from connect.py
+        with postgres_conn.begin() as connection:
+            result_proxy = connection.execute(text(formatted_sql_content))
+            keys = result_proxy.keys()
+            for row in result_proxy:
+                results.append({key: value for key,value in zip(keys,row)})
+        output_format = request.args.get('format', 'json')
+        return format_output(results, output_format, 'domain_summary')
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
