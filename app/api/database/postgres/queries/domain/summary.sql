@@ -18,7 +18,7 @@ JOIN
 ON
     targets.domains.id = targets.urls.domain_id
 WHERE
-    targets.domains.domain ILIKE '%s'
+    targets.domains.domain LIKE '%s'
     AND targets.domains.is_valid = TRUE
 GROUP BY
     targets.domains.id,
