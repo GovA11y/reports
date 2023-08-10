@@ -42,3 +42,4 @@ def impact_a11yscores(impact,score_data):
         return score
 
     return None
+

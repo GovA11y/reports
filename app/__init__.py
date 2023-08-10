@@ -11,6 +11,8 @@ from app.api.activity.views import activity_bp
 from app.api.metrics.views import metrics_bp
 from app.api.utils import start_scheduled_jobs
 from app.logging import logger
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 load_dotenv()
 
@@ -50,10 +52,25 @@ def configure_pyroscope():
     logger.info('Pyroscope Configured')
 
 
+def traces_sampler(sampling_context):
+    # Customize your sampling logic here if needed
+    # return a number between 0 and 1 or a boolean
+    return 1.0
+
+
+def configure_sentry():
+    sentry_sdk.init(
+        dsn=os.getenv("SENTRY_DSN_REPORTS"),
+        integrations=[FlaskIntegration()],
+        traces_sample_rate=1.0,
+        traces_sampler=traces_sampler  # Optional if you want dynamic sampling
+    )
 
 
 def startup():
     configure_pyroscope()
+    configure_sentry()
+    logger.info('Sentry Configured')
     logger.info('Starting Scheduled Jobs')
     start_scheduled_jobs()
     logger.info('Scheduled Jobs Started')
