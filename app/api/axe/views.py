@@ -131,13 +131,10 @@ def axe_domain_error_summary():
 # Githib Reports #15
 # https://github.com/orgs/GovA11y/projects/1?pane=issue&itemId=34493510
 @axe_bp.route('/coverage', methods=['GET'])
-def test_coverage():
-    raw_domain = request.args.get('domain', 'gsa.gov')
-    domain = f"%{raw_domain}"
-
-
+def axe_coverage():
+    raw_domain = request.args.get('domain', 'nasa.gov')
+    domain = f"{raw_domain}"
     sql_file = "app/api/database/postgres/queries/axe/coverage.sql"
-    logger.info(f'Request: Test Coverage by Domain\nDomain: {raw_domain}')
 
     # Read sql file
     with open(sql_file) as file:
@@ -146,15 +143,15 @@ def test_coverage():
 
     results = []
     try:
-        # Run the query using ClickHouse's execute method
-        rows = clickhouse_conn.execute(formatted_sql_content, with_column_types=True)
-        keys = [col[0] for col in rows[1]]
-        for row in rows[0]:
-            results.append({key: value for key,value in zip(keys, row)})
+        # Established database connection from connect.py
+        with postgres_conn.begin() as connection:
+            result_proxy = connection.execute(text(formatted_sql_content))
+            keys = result_proxy.keys()
+            for row in result_proxy:
+                results.append({key: value for key,value in zip(keys,row)})
         output_format = request.args.get('format', 'json')
         return format_output(results, output_format, 'domain_summary')
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
 
 
