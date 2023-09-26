@@ -16,7 +16,7 @@ axe_bp = Blueprint(
 
 
 @axe_bp.route('/summary', methods=['GET'])
-def axe_summary():
+def axe_summaryy():
     raw_domain = request.args.get('domain', 'gsa.gov')
     domain = f"%{raw_domain}"
 
