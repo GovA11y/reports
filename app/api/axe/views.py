@@ -130,8 +130,8 @@ def axe_domain_error_summary():
 
 # Githib Reports #15
 # https://github.com/orgs/GovA11y/projects/1?pane=issue&itemId=34493510
-@axe_bp.route('/test-summary', methods=['GET'])
-def axe_summary():
+@axe_bp.route('/coverage', methods=['GET'])
+def test_coverage():
     raw_domain = request.args.get('domain', 'gsa.gov')
     domain = f"%{raw_domain}"
 
