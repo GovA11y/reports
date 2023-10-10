@@ -140,7 +140,7 @@ Provides a summary of Axe accessibility test results specifically for domains. T
 
 ##### URL Parameters:
 
-- `domain` (Optional): Specifies the domain & sub-domains for which to return a summary. If not provided, defaults to 'nasa.gov'.
+- `domain` (Required): Specifies the domain & sub-domains for which to return a summary. If not provided, defaults to 'nasa.gov'.
 - `format` (Optional): Specifies the output format of the results. The supported formats are CSV, XLSX, HTML, XML, YAML, and JSON. If not provided, defaults to JSON.
 
 ##### Output Format:
